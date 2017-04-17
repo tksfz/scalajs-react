@@ -168,12 +168,14 @@ object ReactComponentB {
     def renderS(f: (DuringCallbackU[P, S, B], S) => ReactElement): Out =
       render($ => f($, $.state))
 
+    /** Convenience method to supply a render function that only uses Props. */
     def render_P(f: P => ReactElement): Out =
       render($ => f($.props))
 
     def render_C(f: PropsChildren => ReactElement): Out =
       render($ => f($.propsChildren))
 
+    /** Convenience method to supply a render function that only uses State. */
     def render_S(f: S => ReactElement): Out =
       render($ => f($.state))
 

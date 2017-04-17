@@ -82,6 +82,8 @@ object StaticDsl {
       new RouteB(regexEscape(s), 0, _ => someUnit, _ => s)
 
     val / = literal("/")
+
+    val ## = literal("##")
   }
 
   abstract class RouteCommon[R[X] <: RouteCommon[R, X], A] {
@@ -137,6 +139,12 @@ object StaticDsl {
 
     def /[B](next: RouteB[B])(implicit c: Composition[A, B]): RouteB[c.C] =
       this ~ RouteB./ ~ next
+
+    def ##[B](next: RouteB[B])(implicit c: Composition[A, B]): RouteB[c.C] =
+      this ~ RouteB.## ~ next
+
+    def #[B](next: RouteB[B])(implicit c: Composition[A, B]): RouteB[c.C] =
+      this ## (this / next)
 
     override def parseThen(f: Option[A] => Option[A]): RouteB[A] =
       new RouteB(regex, matchGroups, f compose parse, build)
